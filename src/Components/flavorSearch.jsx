@@ -46,6 +46,8 @@ export default class Search extends Component {
     axios
       .patch(`http://localhost:8005/prices/${name}/${com}/${mod}`, { data })
       .then(res => console.log(res.data.result));
+
+    this.setState({ update: !this.state.update });
   }
 
   handleClose() {
@@ -79,23 +81,39 @@ export default class Search extends Component {
           value={value}
           data={data}
           renderResults={results => (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between"
-              }}
-            >
-              <ListGroup>
+            <div>
+              <ListGroup
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  flexWrap: "wrap"
+                }}
+              >
                 {results.map(el => (
                   <div>
-                    <Card>
-                      <ListGroup.Item>{`${el.flavor.name}/${el.flavor.mod}/${el.flavor.com}/${el.flavor.price}`}</ListGroup.Item>
+                    <Card
+                      style={{
+                        width: "350px",
+                        height: "100px",
+                        margin: "15px"
+                      }}
+                    >
+                      <ListGroup.Item>{`${el.flavor.name}/${el.flavor.mod}/${
+                        el.flavor.com
+                      }/${parseFloat(el.flavor.price).toFixed(
+                        2
+                      )}`}</ListGroup.Item>
                       <Button
-                        style={{ width: "200px" }}
+                        style={{
+                          width: "100px",
+                          justifyContent: "center",
+                          float: "right"
+                        }}
+                        variant="info"
                         onClick={this.updateFlavor.bind(this, el)}
                       >
-                        update flavor
+                        update
                       </Button>
                     </Card>
                   </div>
@@ -149,10 +167,7 @@ export default class Search extends Component {
                   </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button
-                    variant="secondary"
-                    onClick={() => this.handleClose()}
-                  >
+                  <Button variant="primary" onClick={() => this.handleClose()}>
                     Close
                   </Button>
                   <Button variant="primary" onClick={() => this.saveChanges()}>
